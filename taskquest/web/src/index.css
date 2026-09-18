@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply font-body;
+  }
+
+  /* Categorical chart palette (fixed order, validated for CVD safety in both
+     modes — see the Productivity Dashboard charts). Light values live on
+     :root; the handful that need a different lightness in dark mode are
+     overridden under .dark. Never reassign an entity's slot once used. */
+  :root {
+    --chart-1: #6a2ff0; /* purple */
+    --chart-2: #159c82; /* teal */
+    --chart-3: #e2435f; /* coral */
+    --chart-4: #d99a2b; /* gold */
+    --chart-5: #2f6fe0; /* blue */
+    --chart-6: #d63384; /* pink */
+    --chart-other: #94a3b8; /* de-emphasis gray, for folded/"Other" and emphasis-form context bars */
+  }
+  .dark {
+    --chart-1: #8b6bff;
+    --chart-4: #b87e19;
+    --chart-5: #5e8ff2;
+    --chart-other: #64748b;
+  }
+  body {
+    @apply bg-slate-100 text-slate-900 antialiased dark:bg-[#160f2e] dark:text-slate-100;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 10% 0%, rgba(124, 77, 255, 0.12), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(34, 193, 164, 0.12), transparent 40%);
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-pop {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-display font-bold text-white
+      shadow-pop transition active:translate-y-1 active:shadow-none;
+  }
+  .card-pop {
+    @apply rounded-3xl border-2 border-slate-900/5 bg-white shadow-pop dark:border-white/5 dark:bg-white/5;
+  }
+  .input-pop {
+    @apply w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 font-body text-slate-900 outline-none
+      transition focus:border-brand-500 dark:border-white/10 dark:bg-white/5 dark:text-white;
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-pop-in {
+  animation: pop-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float {
+  animation: float-y 3.5s ease-in-out infinite;
+}
