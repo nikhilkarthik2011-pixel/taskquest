@@ -100,7 +100,7 @@ router.get("/me", requireAuth, async (req, res, next) => {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.userId]);
     const user = result.rows[0];
     if (!user) return res.status(404).json({ error: "User not found" });
-    res.json({ user: publicUser(user) });
+    res.json({ user: publicUser(user), token: signToken(user.id) });
   } catch (err) {
     next(err);
   }
