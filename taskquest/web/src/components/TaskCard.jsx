@@ -1,12 +1,25 @@
 import { PRIORITIES } from "../lib/priorities.js";
 
+// Today's date as YYYY-MM-DD in the user's local timezone, matching how
+// due dates are stored.
+function todayString() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
 export default function TaskCard({ task, list, onToggle, onDelete, onCancelRecurring }) {
   const p = PRIORITIES[task.priority] || PRIORITIES.important;
+  const dueToday = !task.completed && task.due_date?.slice(0, 10) === todayString();
 
   return (
     <li
       className={`card-pop animate-pop-in flex items-start gap-3 p-4 transition ${
         task.completed ? "opacity-60" : ""
+      } ${
+        dueToday
+          ? "border-amber-400 bg-amber-50 dark:border-amber-400/60 dark:bg-amber-400/10"
+          : ""
       }`}
     >
       <button
@@ -54,9 +67,14 @@ export default function TaskCard({ task, list, onToggle, onDelete, onCancelRecur
         {task.notes && (
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">{task.notes}</p>
         )}
-        {task.due_date && (
-          <p className="mt-1 text-xs font-semibold text-slate-400">Due {task.due_date}</p>
-        )}
+        {task.due_date &&
+          (dueToday ? (
+            <p className="mt-1 text-xs font-bold text-amber-600 dark:text-amber-300">
+              📅 Due today
+            </p>
+          ) : (
+            <p className="mt-1 text-xs font-semibold text-slate-400">Due {task.due_date}</p>
+          ))}
       </div>
 
       <button
